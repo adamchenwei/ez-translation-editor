@@ -44,8 +44,8 @@ class TranslatorInterface extends Component {
     console.log(raw)
     this.setState(prevState => ({
       ...prevState,
-      chineseSentencesList: convertRawTextToList('chinese', raw.chinese.p1a),
-      englishSentencesList: convertRawTextToList('english', raw.english.p1a),
+      chineseSentencesList: convertRawTextToList('chinese', raw.chinese.p1b),
+      englishSentencesList: convertRawTextToList('english', raw.english.p1b),
     }));
   }
 
