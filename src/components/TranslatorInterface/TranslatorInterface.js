@@ -44,8 +44,8 @@ class TranslatorInterface extends Component {
     console.log(raw)
     this.setState(prevState => ({
       ...prevState,
-      chineseSentencesList: convertRawTextToList('chinese', raw.chinese.p1b),
-      englishSentencesList: convertRawTextToList('english', raw.english.p1b),
+      chineseSentencesList: convertRawTextToList('chinese', raw.chinese.p2c),
+      englishSentencesList: convertRawTextToList('english', raw.english.p2c),
     }));
   }
 
@@ -54,11 +54,16 @@ class TranslatorInterface extends Component {
     const chineseList = this.state.chineseSentencesList || [];
     const englishList = this.state.englishSentencesList || [];
     const isCombinableWithoutError = chineseList.length === englishList.length;
-    const isCominable = englishList.length > chineseList.length;
+
+    const englishLonger = englishList.length > chineseList.length;
+    const sameLength = englishList.length === chineseList.length;
+    const whichLanguageLonger = sameLength ? 'same' : (englishLonger ? 'english' : 'chinese');
+
+    const mapperLanguageName = whichLanguageLonger === 'same' ? 'english' : (englishLonger ? 'english' : 'chinese');
     return (
       <React.Fragment>
         <h1>isCombinableWithoutError: { isCombinableWithoutError ? 'true' : 'false'}</h1>
-        <h2>isCominable: {isCominable ? 'true' : 'false'}</h2>
+        <h2>whichLanguageLonger: {whichLanguageLonger} </h2>
         <h2>chineseList: {chineseList.length}</h2>
         <h2>englishList: {englishList.length}</h2>
         <TextArea type="textarea" name='english' onInput={this.onInput} placeholder="english"/>
@@ -67,11 +72,11 @@ class TranslatorInterface extends Component {
           !isEmpty(this.state.chineseSentencesList) ?
             <div>
             {
-              isCominable && englishList.length ? this.state.englishSentencesList.map((sentence, index) => {
+              englishList.length ? this.state[`${mapperLanguageName}SentencesList`].map((sentence, index) => {
                 return (
                   <section key={index}>
-                    <p key={`${index}english`}>{sentence}</p>
-                    <p key={`${index}chinese`}>{chineseList[index] || <FlaggedText>missing / mismatch</FlaggedText>}</p>
+                    <p key={`${index}english`}>{this.state.englishSentencesList[index] || <FlaggedText>missing / mismatch</FlaggedText>}</p>
+                    <p key={`${index}chinese`}>{this.state.chineseSentencesList[index] || <FlaggedText>missing / mismatch</FlaggedText>}</p>
                     <br />
                   </section>
                 );
