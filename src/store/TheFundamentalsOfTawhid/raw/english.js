@@ -1,5 +1,5 @@
 const p1a =`
-p1 A None has the right to be worshipped in truth except Allah Continued.
+A None has the right to be worshipped in truth except Allah Continued.
 
 .
 
@@ -67,9 +67,7 @@ The Prophet Muhammad (; ,j4-4,) stated, "Whosoever visits a fortune teller and b
 
 " (Authentically reported by Abu Dawad).
 
-And this is due to the statement of Allah, "With Him [i.
-
-e.
+And this is due to the statement of Allah, "With Him [i.e.
 
 Allah)] are the keys to the unseen and none knows the unseen except Him alone.
 
@@ -81,9 +79,7 @@ No person knows what he will earn tomorrow, and no person knows in which land he
 
 Verily, Allah is the All-Knower, All-Aware:' (Qur'an, Luqman: 34).
 
-From this brief discussion, the reader can see why the Salafis (i.
-
-e.
+From this brief discussion, the reader can see why the Salafis (i.e.
 
 Ahl al-Sunnah waliamaah) place so much importance upon Tawhrd and give it the priority it deserves.
 

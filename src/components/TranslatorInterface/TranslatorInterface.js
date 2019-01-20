@@ -14,8 +14,12 @@ class TranslatorInterface extends Component {
         chinese: '',
         english: '',
       },
+      rawTextCollectionChinese: '',
+      rawTextCollectionEnglish: '',
+      currentCollectionName: 'p1a',
     };
     this.onInput = this.onInput.bind(this);
+    this.onChangeCollectionName = this.onChangeCollectionName.bind(this);
   }
   onInput(event) {
     event.persist();
@@ -41,14 +45,46 @@ class TranslatorInterface extends Component {
   }
 
   componentDidMount() {
-    console.log(raw)
+    console.log(raw);
+    this.updateCollectionDisplay();
+  }
+
+  updateCollectionDisplay() {
+    let rawTextCollectionChinese = '';
+    let rawTextCollectionEnglish = '';
+
+    rawTextCollectionChinese = raw.chinese[this.state.currentCollectionName];
+    rawTextCollectionEnglish = raw.english[this.state.currentCollectionName];
+
+    // Object.keys(raw.chinese).forEach(key => {
+    //   console.log(key);
+    //   rawTextCollectionChinese = rawTextCollectionChinese.concat(`${key}。
+    //   `);
+    //   rawTextCollectionChinese = rawTextCollectionChinese.concat(raw.chinese[key]);
+    // });
+
+    // Object.keys(raw.english).forEach(key => {
+    //   rawTextCollectionEnglish = rawTextCollectionEnglish.concat(`${key}.
+    //   `);
+    //   rawTextCollectionEnglish = rawTextCollectionEnglish.concat(raw.english[key]);
+    // });
+
     this.setState(prevState => ({
       ...prevState,
-      chineseSentencesList: convertRawTextToList('chinese', raw.chinese.p2c),
-      englishSentencesList: convertRawTextToList('english', raw.english.p2c),
+      chineseSentencesList: convertRawTextToList('chinese', rawTextCollectionChinese),
+      englishSentencesList: convertRawTextToList('english', rawTextCollectionEnglish),
+      rawTextCollectionChinese,
+      rawTextCollectionEnglish,
     }));
   }
 
+  onChangeCollectionName(name) {
+    this.setState(prevState => ({
+      ...prevState,
+      currentCollectionName: name,
+    }));
+    this.updateCollectionDisplay();
+  }
 
   render() {
     const chineseList = this.state.chineseSentencesList || [];
@@ -58,7 +94,14 @@ class TranslatorInterface extends Component {
     const englishLonger = englishList.length > chineseList.length;
     const sameLength = englishList.length === chineseList.length;
     const whichLanguageLonger = sameLength ? 'same' : (englishLonger ? 'english' : 'chinese');
-
+    const COLLECTIONS_NAMES_LIST = [
+      'p1a',
+      'p1b',
+      'p1c',
+      'p2a',
+      'p2b',
+      'p2c',
+    ]
     const mapperLanguageName = whichLanguageLonger === 'same' ? 'english' : (englishLonger ? 'english' : 'chinese');
     return (
       <React.Fragment>
@@ -66,6 +109,17 @@ class TranslatorInterface extends Component {
         <h2>whichLanguageLonger: {whichLanguageLonger} </h2>
         <h2>chineseList: {chineseList.length}</h2>
         <h2>englishList: {englishList.length}</h2>
+        <p>
+        {
+          COLLECTIONS_NAMES_LIST.map((name, index) => {
+            return (
+              <button key={index} onClick={() => {
+                this.onChangeCollectionName(name);
+              }}>{name}</button>
+            )
+          })
+        }
+        </p>
         <TextArea type="textarea" name='english' onInput={this.onInput} placeholder="english"/>
         <TextArea type="textarea" name='chinese' onInput={this.onInput} placeholder="chinese"/>
         {
@@ -75,8 +129,9 @@ class TranslatorInterface extends Component {
               englishList.length ? this.state[`${mapperLanguageName}SentencesList`].map((sentence, index) => {
                 return (
                   <section key={index}>
-                    <p key={`${index}english`}>{this.state.englishSentencesList[index] || <FlaggedText>missing / mismatch</FlaggedText>}</p>
-                    <p key={`${index}chinese`}>{this.state.chineseSentencesList[index] || <FlaggedText>missing / mismatch</FlaggedText>}</p>
+                    <p key={`${index}english`}>Google： {this.state.englishSentencesList[index] || <FlaggedText>missing / mismatch</FlaggedText>}</p>
+                    <p key={`${index}chinese`}>Google： {this.state.chineseSentencesList[index] || <FlaggedText>missing / mismatch</FlaggedText>}</p>
+                    {/* <p key={`${index}translatorSpace`}>Adam:</p> */}
                     <br />
                   </section>
                 );
@@ -85,18 +140,6 @@ class TranslatorInterface extends Component {
             </div>
             : null
         }
-
-        {/* {
-          !isEmpty(this.state.englishSentencesList) ?
-            <div>
-            {
-              this.state.englishSentencesList.map((sentence, index) => {
-                return <p key={index}>{sentence}</p>;
-              })
-            }
-            </div>
-            : null
-        } */}
       </React.Fragment>);
   }
 }
