@@ -9,6 +9,7 @@ import FlaggedText from './style/FlaggedText';
 class TranslatorInterface extends Component {
   constructor(props) {
     super(props);
+    this.content = null;
     this.state = {
       rawContent: {
         chinese: '',
@@ -20,6 +21,7 @@ class TranslatorInterface extends Component {
     };
     this.onInput = this.onInput.bind(this);
     this.onChangeCollectionName = this.onChangeCollectionName.bind(this);
+    this.onCopyStuff =  this.onCopyStuff.bind(this);
   }
   onInput(event) {
     event.persist();
@@ -86,6 +88,16 @@ class TranslatorInterface extends Component {
     this.updateCollectionDisplay();
   }
 
+  onCopyStuff() {
+    // debugger
+    console.log(this.content);
+    const range = document.createRange();
+    const selection = window.getSelection();
+    range.selectNodeContents(this.content);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    document.execCommand('copy');
+  }
   render() {
     const chineseList = this.state.chineseSentencesList || [];
     const englishList = this.state.englishSentencesList || [];
@@ -109,6 +121,7 @@ class TranslatorInterface extends Component {
         <h2>whichLanguageLonger: {whichLanguageLonger} </h2>
         <h2>chineseList: {chineseList.length}</h2>
         <h2>englishList: {englishList.length}</h2>
+        <button onClick={this.onCopyStuff}>Copy Stuff</button>
         <p>
         {
           COLLECTIONS_NAMES_LIST.map((name, index) => {
@@ -122,24 +135,26 @@ class TranslatorInterface extends Component {
         </p>
         <TextArea type="textarea" name='english' onInput={this.onInput} placeholder="english"/>
         <TextArea type="textarea" name='chinese' onInput={this.onInput} placeholder="chinese"/>
+        <section ref={(el) => this.content = el}>
         {
           !isEmpty(this.state.chineseSentencesList) ?
             <div>
             {
               englishList.length ? this.state[`${mapperLanguageName}SentencesList`].map((sentence, index) => {
                 return (
-                  <section key={index}>
+                  <React.Fragment key={index}>
                     <p key={`${index}english`}>Google： {this.state.englishSentencesList[index] || <FlaggedText>missing / mismatch</FlaggedText>}</p>
                     <p key={`${index}chinese`}>Google： {this.state.chineseSentencesList[index] || <FlaggedText>missing / mismatch</FlaggedText>}</p>
-                    {/* <p key={`${index}translatorSpace`}>Adam:</p> */}
+                    <p key={`${index}translatorSpace`}>Adam:</p>
                     <br />
-                  </section>
+                  </React.Fragment>
                 );
               }) : null
             }
             </div>
             : null
         }
+        </section>
       </React.Fragment>);
   }
 }
