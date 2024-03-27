@@ -1,3 +1,7 @@
+# Intro
+This is a small utility for comparing translation sentence by sentence using Google Translate.
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
